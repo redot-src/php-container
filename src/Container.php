@@ -111,14 +111,14 @@ class Container implements ContainerInterface
      * Make a concrete instance of the given abstract.
      *
      * @param string $abstract
-     * @param mixed ...$params
+     * @param array $params
      * @return mixed
      *
      * @throws NotFoundException
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    public function make(string $abstract, mixed ...$params): mixed
+    public function make(string $abstract, array $params = []): mixed
     {
         $abstract = $this->getAlias($abstract);
         if (isset($this->instances[$abstract])) return $this->instances[$abstract];
@@ -188,14 +188,14 @@ class Container implements ContainerInterface
      * Build concrete.
      *
      * @param callable|string $concrete
-     * @param mixed ...$params
+     * @param array $params
      * @return mixed
      *
      * @throws NotFoundException
      * @throws ReflectionException
      * @throws BindingResolutionException
      */
-    protected function build(callable|string $concrete, mixed ...$params): mixed
+    protected function build(callable|string $concrete, array $params = []): mixed
     {
         if ($concrete instanceof Closure) return $concrete($this, ...$params);
 
@@ -221,12 +221,14 @@ class Container implements ContainerInterface
      * Get dependencies for the given constructor.
      *
      * @param array $dependencies
-     * @param mixed ...$params
+     * @param array $params
      * @return array
      *
      * @throws BindingResolutionException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
-    protected function getDependencies(array $dependencies, mixed ...$params): array
+    protected function getDependencies(array $dependencies, array $params = []): array
     {
         $results = [];
         foreach ($dependencies as $dependency) {
@@ -240,19 +242,21 @@ class Container implements ContainerInterface
      * Resolve a dependency for the given constructor.
      *
      * @param ReflectionParameter $dependency
-     * @param mixed ...$params
+     * @param array $params
      * @return mixed
      *
      * @throws BindingResolutionException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
-    protected function resolveDependency(ReflectionParameter $dependency, mixed ...$params): mixed
+    protected function resolveDependency(ReflectionParameter $dependency, array $params = []): mixed
     {
         if (isset($params[$dependency->name])) return $params[$dependency->name];
+        if ($dependency->isDefaultValueAvailable()) return $dependency->getDefaultValue();
 
         try {
             return $this->make(Utils::getParameterClassName($dependency));
         } catch (BindingResolutionException) {
-            if ($dependency->isDefaultValueAvailable()) return $dependency->getDefaultValue();
             throw new BindingResolutionException("Unable to resolve dependency [$dependency->name].");
         }
     }
@@ -272,6 +276,8 @@ class Container implements ContainerInterface
     /**
      * {@inheritDoc}
      *
+     * @throws BindingResolutionException
+     * @throws NotFoundException
      * @throws ReflectionException
      */
     public function get(string $id): mixed
