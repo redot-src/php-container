@@ -1,0 +1,47 @@
+{
+    "name": "redot/container",
+    "description": "PHP Minimal DI Container",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/redot-src/php-container/issues",
+        "source": "https://github.com/redot-src/php-container"
+    },
+    "authors": [
+        {
+            "name": "Abdelrhman Said",
+            "email": "abdelrhmansaidzaki@hotmail.com",
+            "role": "Developer"
+        }
+    ],
+    "keywords": ["php", "container", "dependency", "injection"],
+    "autoload": {
+        "psr-4": {
+            "Redot\\Container\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Redot\\Container\\Tests\\": "tests/assets/"
+        }
+    },
+    "require": {
+        "psr/container": "^2.0"
+    },
+    "require-dev": {
+        "pestphp/pest": "^1.21"
+    },
+    "config": {
+        "lock": false,
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "./vendor/bin/pest"
+    },
+    "scripts-description": {
+        "test": "Runs the tests"
+    }
+}
