@@ -197,7 +197,9 @@ class Container implements ContainerInterface
      */
     protected function build(callable|string $concrete, array $params = []): mixed
     {
-        if ($concrete instanceof Closure) return $concrete($this, ...$params);
+        if ($concrete instanceof Closure) {
+            return $concrete($this, ...array_values($params));
+        }
 
         try {
             $reflector = new ReflectionClass($concrete);
@@ -213,8 +215,8 @@ class Container implements ContainerInterface
         if (is_null($constructor)) return $reflector->newInstance();
 
         $dependencies = $constructor->getParameters();
-        $instances = $this->getDependencies($dependencies, $params);
-        return $reflector->newInstanceArgs($instances);
+        $args = $this->getDependencies($dependencies, $params);
+        return $reflector->newInstanceArgs($args);
     }
 
     /**
@@ -224,41 +226,17 @@ class Container implements ContainerInterface
      * @param array $params
      * @return array
      *
-     * @throws BindingResolutionException
      * @throws NotFoundException
      * @throws ReflectionException
+     * @throws BindingResolutionException
      */
     protected function getDependencies(array $dependencies, array $params = []): array
     {
-        $results = [];
-        foreach ($dependencies as $dependency) {
-            $results[] = $this->resolveDependency($dependency, $params);
-        }
-
-        return $results;
-    }
-
-    /**
-     * Resolve a dependency for the given constructor.
-     *
-     * @param ReflectionParameter $dependency
-     * @param array $params
-     * @return mixed
-     *
-     * @throws BindingResolutionException
-     * @throws NotFoundException
-     * @throws ReflectionException
-     */
-    protected function resolveDependency(ReflectionParameter $dependency, array $params = []): mixed
-    {
-        if (isset($params[$dependency->name])) return $params[$dependency->name];
-        if ($dependency->isDefaultValueAvailable()) return $dependency->getDefaultValue();
-
-        try {
+        return array_map(function ($dependency) use ($params) {
+            if (isset($params[$dependency->name])) return $params[$dependency->name];
+            if ($dependency->isDefaultValueAvailable()) return $dependency->getDefaultValue();
             return $this->make(Utils::getParameterClassName($dependency));
-        } catch (BindingResolutionException) {
-            throw new BindingResolutionException("Unable to resolve dependency [$dependency->name].");
-        }
+        }, $dependencies);
     }
 
     /**
@@ -276,9 +254,9 @@ class Container implements ContainerInterface
     /**
      * {@inheritDoc}
      *
-     * @throws BindingResolutionException
      * @throws NotFoundException
      * @throws ReflectionException
+     * @throws BindingResolutionException
      */
     public function get(string $id): mixed
     {
