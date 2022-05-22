@@ -4,7 +4,6 @@ namespace Redot\Container;
 
 use Closure;
 use ReflectionClass;
-use ReflectionParameter;
 use ReflectionException;
 use Psr\Container\ContainerInterface;
 use Redot\Container\Errors\NotFoundException;
