@@ -4,6 +4,7 @@ namespace Redot\Container;
 
 use Closure;
 use ReflectionClass;
+use ReflectionMethod;
 use ReflectionException;
 use Psr\Container\ContainerInterface;
 use Redot\Container\Errors\NotFoundException;
@@ -236,6 +237,22 @@ class Container implements ContainerInterface
             if ($dependency->isDefaultValueAvailable()) return $dependency->getDefaultValue();
             return $this->make(Utils::getParameterClassName($dependency));
         }, $dependencies);
+    }
+
+    /**
+     * Use Container to resolve a method on a class.
+     *
+     * @param string $class
+     * @param string $method
+     * @param array $params
+     * @return mixed
+     */
+    public function call(string $class, string $method, array $params = [])
+    {
+        $reflector = new ReflectionMethod($class, $method);
+        $dependencies = $reflector->getParameters();
+        $args = $this->getDependencies($dependencies, $params);
+        return $reflector->invokeArgs($this->make($class), $args);
     }
 
     /**

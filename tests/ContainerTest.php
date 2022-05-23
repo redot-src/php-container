@@ -1,8 +1,8 @@
 <?php
 
 use Redot\Container\Container;
-use Redot\Container\Errors\BindingResolutionException;
 use Redot\Container\Errors\NotFoundException;
+use Redot\Container\Errors\BindingResolutionException;
 
 test('Container::bind creates a new binding', function () {
     $container = new Container();
@@ -68,6 +68,17 @@ test('Container::make returns the correct value', function () {
     expect($container->make('foo'))->toBe('bar');
 });
 
+test('Container::call resolves a method on a class.', function () {
+    class Foo {
+        public function bar() {
+            return 'bar';
+        }
+    }
+
+    $container = new Container();
+    expect($container->call(Foo::class, 'bar'))->toBe('bar');
+});
+
 test('Container::has returns true if the given key exists', function () {
     $container = new Container();
     $container->bind('foo', function () {
@@ -80,7 +91,7 @@ test('Container::has returns true if the given key exists', function () {
 
 test('Container throws an exception if the given key does not exist', function () {
     $container = new Container();
-    expect(fn() => $container->get('foo'))->toThrow(NotFoundException::class);
+    expect(fn() => $container->get('test'))->toThrow(NotFoundException::class);
 });
 
 test('Container throws an expection if the given key is not instantiable', function () {
@@ -90,6 +101,5 @@ test('Container throws an expection if the given key is not instantiable', funct
         public function __construct() {}
     };
 
-    $container->bind(classA::class);
     expect(fn() => $container->make(classA::class))->toThrow(BindingResolutionException::class);
 });
