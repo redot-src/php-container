@@ -2,6 +2,7 @@
 
 namespace Redot\Container;
 
+use Closure;
 use ReflectionNamedType;
 use ReflectionParameter;
 
@@ -13,13 +14,10 @@ class Utils
      * @param ReflectionParameter $parameter
      * @return string
      */
-    public static function getParameterClassName(ReflectionParameter $parameter): string
+    public static function getParameterClassName(ReflectionParameter $parameter): string|null
     {
         $type = $parameter->getType();
-
-        if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) {
-            return '';
-        }
+        if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) return null;
 
         $name = $type->getName();
 
@@ -29,5 +27,17 @@ class Utils
         }
 
         return $name;
+    }
+
+    /**
+     * Return the default value of the given value.
+     *
+     * @param mixed $value
+     * @param mixed ...$args
+     * @return mixed
+     */
+    public static function unwrapIfClosure($value, ...$args)
+    {
+        return $value instanceof Closure ? $value(...$args) : $value;
     }
 }

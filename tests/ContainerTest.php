@@ -1,20 +1,95 @@
 <?php
 
 use Redot\Container\Container;
-use Redot\Container\Tests\ClassA;
-use Redot\Container\Tests\ClassB;
+use Redot\Container\Errors\BindingResolutionException;
+use Redot\Container\Errors\NotFoundException;
 
-test('Method: bind', function () {
-    Container::getInstance()->bind(ClassA::class);
-    expect(Container::getInstance()->make(ClassA::class))->toBeInstanceOf(ClassA::class);
+test('Container::bind creates a new binding', function () {
+    $container = new Container();
+    $container->bind('foo', function () {
+        return 'bar';
+    });
+
+    expect($container->get('foo'))->toBe('bar');
 });
 
-test('Method: alias', function () {
-    Container::getInstance()->alias(ClassA::class, 'ClassA');
-    expect(Container::getInstance()->make('ClassA'))->toBeInstanceOf(ClassA::class);
+test('Container::bind with dependencies', function () {
+    $container = new Container();
+    $container->bind('foo', function ($container, $bar) {
+        return $bar;
+    });
+
+    expect($container->make('foo', ['bar' => true]))->toBe(true);
 });
 
-test('Method: singleton', function () {
-    Container::getInstance()->singleton(ClassB::class);
-    expect(Container::getInstance()->make(ClassB::class))->toBeInstanceOf(ClassB::class);
+test('Container::bind with default values for dependencies', function () {
+    $container = new Container();
+    $container->bind('foo', function ($container, $bar = false) {
+        return $bar;
+    });
+
+    expect($container->make('foo'))->toBe(false);
+});
+
+test('Container::singleton creates a new singleton', function () {
+    $container = new Container();
+    $container->singleton('class', function () {
+        return new stdClass;
+    });
+
+    expect($container->get('class'))->toBe($container->get('class'));
+});
+
+test('Container::alias creates a new alias', function () {
+    $container = new Container();
+    $container->bind('foo', function () {
+        return 'bar';
+    });
+
+    $container->alias('foo', 'foo_alias');
+    expect($container->get('foo_alias'))->toBe('bar');
+});
+
+test('Container::get returns the correct value', function () {
+    $container = new Container();
+    $container->bind('foo', function () {
+        return 'bar';
+    });
+
+    expect($container->get('foo'))->toBe('bar');
+});
+
+test('Container::make returns the correct value', function () {
+    $container = new Container();
+    $container->bind('foo', function () {
+        return 'bar';
+    });
+
+    expect($container->make('foo'))->toBe('bar');
+});
+
+test('Container::has returns true if the given key exists', function () {
+    $container = new Container();
+    $container->bind('foo', function () {
+        return 'bar';
+    });
+
+    expect($container->has('foo'))->toBe(true);
+    expect($container->has('bar'))->toBe(false);
+});
+
+test('Container throws an exception if the given key does not exist', function () {
+    $container = new Container();
+    expect(fn() => $container->get('foo'))->toThrow(NotFoundException::class);
+});
+
+test('Container throws an expection if the given key is not instantiable', function () {
+    $container = new Container();
+
+    abstract class classA {
+        public function __construct() {}
+    };
+
+    $container->bind(classA::class);
+    expect(fn() => $container->make(classA::class))->toThrow(BindingResolutionException::class);
 });
