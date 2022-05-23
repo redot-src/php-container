@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Redot\Container\Container;
 use Redot\Container\Errors\NotFoundException;
@@ -69,8 +69,10 @@ test('Container::make returns the correct value', function () {
 });
 
 test('Container::call resolves a method on a class.', function () {
-    class Foo {
-        public function bar() {
+    class Foo
+    {
+        public function bar(): string
+        {
             return 'bar';
         }
     }
@@ -94,12 +96,15 @@ test('Container throws an exception if the given key does not exist', function (
     expect(fn() => $container->get('test'))->toThrow(NotFoundException::class);
 });
 
-test('Container throws an expection if the given key is not instantiable', function () {
+test('Container throws an exception if the given key is not instantiable', function () {
     $container = new Container();
 
-    abstract class classA {
-        public function __construct() {}
-    };
+    abstract class classA
+    {
+        public function __construct()
+        {
+        }
+    }
 
     expect(fn() => $container->make(classA::class))->toThrow(BindingResolutionException::class);
 });

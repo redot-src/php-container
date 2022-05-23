@@ -179,9 +179,11 @@ class Container implements ContainerContract
      */
     protected function isShared(string $abstract): bool
     {
-        return isset($this->instances[$abstract]) || (isset($this->bindings[$abstract]['shared']) &&
-            $this->bindings[$abstract]['shared'] === true
-        );
+        return isset($this->instances[$abstract]) ||
+            (
+                isset($this->bindings[$abstract]['shared']) &&
+                $this->bindings[$abstract]['shared'] === true
+            );
     }
 
     /**
@@ -246,6 +248,10 @@ class Container implements ContainerContract
      * @param string $method
      * @param array $params
      * @return mixed
+     *
+     * @throws BindingResolutionException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function call(string $class, string $method, array $params = []): mixed
     {

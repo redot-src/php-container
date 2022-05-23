@@ -4,6 +4,7 @@ namespace Redot\Container;
 
 use ReflectionNamedType;
 use ReflectionParameter;
+use JetBrains\PhpStorm\Pure;
 use Redot\Container\Contracts\Utils as UtilsContract;
 
 class Utils implements UtilsContract
@@ -12,9 +13,9 @@ class Utils implements UtilsContract
      * Get the class name of the given object / class.
      *
      * @param ReflectionParameter $parameter
-     * @return string
+     * @return string|null
      */
-    public static function getParameterClassName(ReflectionParameter $parameter): string|null
+    #[Pure] public static function getParameterClassName(ReflectionParameter $parameter): string|null
     {
         $type = $parameter->getType();
         if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) return null;

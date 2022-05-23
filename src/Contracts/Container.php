@@ -2,7 +2,10 @@
 
 namespace Redot\Container\Contracts;
 
+use ReflectionException;
 use Psr\Container\ContainerInterface;
+use Redot\Container\Errors\NotFoundException;
+use Redot\Container\Errors\BindingResolutionException;
 
 interface Container extends ContainerInterface
 {
