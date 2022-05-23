@@ -180,10 +180,7 @@ class Container implements ContainerContract
     protected function isShared(string $abstract): bool
     {
         return isset($this->instances[$abstract]) ||
-            (
-                isset($this->bindings[$abstract]['shared']) &&
-                $this->bindings[$abstract]['shared'] === true
-            );
+            (isset($this->bindings[$abstract]['shared']) && $this->bindings[$abstract]['shared'] === true);
     }
 
     /**
@@ -269,7 +266,8 @@ class Container implements ContainerContract
      */
     protected function bound(string $abstract): bool
     {
-        return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]) ||
+        return isset($this->bindings[$abstract]) ||
+            isset($this->instances[$abstract]) ||
             $abstract !== $this->getAlias($abstract);
     }
 
