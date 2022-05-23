@@ -38,7 +38,7 @@ After you have created the container, you can bind your dependencies to the cont
 $container->bind(Foo::class);
 ```
 
-Also you can create a singleton, that will be returned every time you call the `get` method.
+Also, you can create a singleton, that will be returned every time you call the `get` method.
 
 ```php
 $container->singleton('foo', function () {
@@ -54,7 +54,7 @@ To get a dependency from the container, you can call the `make` method.
 $foo = $container->make('foo');
 ```
 
-The main difference between `make` and `get` is that `make` accepts a second parameter, which is an array of parameters to pass to the constructor of the class, while `get` does not *becouse of implementing PSR-11*
+The main difference between `make` and `get` is that `make` accepts a second parameter, which is an array of parameters to pass to the constructor of the class, while `get` does not *because of implementing PSR-11*
 
 By the way you can also create an alias for a class, so you can call it with a different name.
 
