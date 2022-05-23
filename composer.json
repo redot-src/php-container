@@ -19,12 +19,8 @@
             "Redot\\Container\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Redot\\Container\\Tests\\": "tests/assets/"
-        }
-    },
     "require": {
+        "php": ">=8.0",
         "psr/container": "^2.0"
     },
     "require-dev": {
