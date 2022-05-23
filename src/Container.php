@@ -6,11 +6,11 @@ use Closure;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionException;
-use Psr\Container\ContainerInterface;
 use Redot\Container\Errors\NotFoundException;
 use Redot\Container\Errors\BindingResolutionException;
+use Redot\Container\Contracts\Container as ContainerContract;
 
-class Container implements ContainerInterface
+class Container implements ContainerContract
 {
     /**
      * Globally available container instance.
@@ -247,7 +247,7 @@ class Container implements ContainerInterface
      * @param array $params
      * @return mixed
      */
-    public function call(string $class, string $method, array $params = [])
+    public function call(string $class, string $method, array $params = []): mixed
     {
         $reflector = new ReflectionMethod($class, $method);
         $dependencies = $reflector->getParameters();

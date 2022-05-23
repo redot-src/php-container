@@ -2,11 +2,11 @@
 
 namespace Redot\Container;
 
-use Closure;
 use ReflectionNamedType;
 use ReflectionParameter;
+use Redot\Container\Contracts\Utils as UtilsContract;
 
-class Utils
+class Utils implements UtilsContract
 {
     /**
      * Get the class name of the given object / class.
@@ -27,17 +27,5 @@ class Utils
         }
 
         return $name;
-    }
-
-    /**
-     * Return the default value of the given value.
-     *
-     * @param mixed $value
-     * @param mixed ...$args
-     * @return mixed
-     */
-    public static function unwrapIfClosure($value, ...$args)
-    {
-        return $value instanceof Closure ? $value(...$args) : $value;
     }
 }
