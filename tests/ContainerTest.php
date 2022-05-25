@@ -69,16 +69,29 @@ test('Container::make returns the correct value', function () {
 });
 
 test('Container::call resolves a method on a class.', function () {
-    class Foo
+    $class = new class
     {
         public function bar(): string
         {
             return 'bar';
         }
-    }
+    };
 
     $container = new Container();
-    expect($container->call(Foo::class, 'bar'))->toBe('bar');
+    expect($container->call(get_class($class), 'bar'))->toBe('bar');
+});
+
+test('Container::call resolves a method on a class with arguments.', function () {
+    $class = new class
+    {
+        public function bar(string $foo): string
+        {
+            return $foo;
+        }
+    };
+
+    $container = new Container();
+    expect($container->call(get_class($class), 'bar', ['foo' => 'bar']))->toBe('bar');
 });
 
 test('Container::bound checks if a binding exists.', function () {
