@@ -81,6 +81,16 @@ test('Container::call resolves a method on a class.', function () {
     expect($container->call(Foo::class, 'bar'))->toBe('bar');
 });
 
+test('Container::bound checks if a binding exists.', function () {
+    $container = new Container();
+    $container->bind('foo', function () {
+        return 'bar';
+    });
+
+    expect($container->bound('foo'))->toBe(true);
+    expect($container->bound('bar'))->toBe(false);
+});
+
 test('Container::has returns true if the given key exists', function () {
     $container = new Container();
     $container->bind('foo', function () {

@@ -259,16 +259,28 @@ class Container implements ContainerContract
     }
 
     /**
-     * Determine if the given abstract type has been bound.
+     * Resolve all of the bindings.
+     *
+     * @return void
+     */
+    public function resolve(): void
+    {
+        foreach ($this->bindings as $abstract => $concrete) {
+            if (!isset($this->resolved[$abstract])) {
+                $this->make($abstract);
+            }
+        }
+    }
+
+    /**
+     * Determine if a given type has been bound.
      *
      * @param string $abstract
      * @return bool
      */
-    protected function bound(string $abstract): bool
+    public function bound(string $abstract): bool
     {
-        return isset($this->bindings[$abstract]) ||
-            isset($this->instances[$abstract]) ||
-            $abstract !== $this->getAlias($abstract);
+        return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]);
     }
 
     /**
