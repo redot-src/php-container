@@ -3,12 +3,14 @@
 namespace Redot\Container;
 
 use Closure;
+use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionException;
 use Redot\Container\Errors\NotFoundException;
 use Redot\Container\Errors\BindingResolutionException;
 use Redot\Container\Contracts\Container as ContainerContract;
+use ReflectionFunction;
 
 class Container implements ContainerContract
 {
@@ -256,20 +258,6 @@ class Container implements ContainerContract
         $dependencies = $reflector->getParameters();
         $args = $this->getDependencies($dependencies, $params);
         return $reflector->invokeArgs($this->make($class), $args);
-    }
-
-    /**
-     * Resolve all of the bindings.
-     *
-     * @return void
-     */
-    public function resolve(): void
-    {
-        foreach ($this->bindings as $abstract => $concrete) {
-            if (!isset($this->resolved[$abstract])) {
-                $this->make($abstract);
-            }
-        }
     }
 
     /**
