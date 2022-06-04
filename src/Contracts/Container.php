@@ -10,6 +10,22 @@ use Redot\Container\Errors\BindingResolutionException;
 interface Container extends ContainerInterface
 {
     /**
+     * Set current container instance.
+     *
+     * @param \Redot\Container\Container $instance
+     * @return void
+     */
+    public static function setInstance(\Redot\Container\Container $instance): void;
+    
+
+    /**
+     * Get current container instance.
+     *
+     * @return \Redot\Container\Container
+     */
+    public static function getInstance(): \Redot\Container\Container;
+
+    /**
      * Bind an abstract to a concrete.
      *
      * @param string $abstract
@@ -51,12 +67,11 @@ interface Container extends ContainerInterface
     public function make(string $abstract, array $params = []): mixed;
 
     /**
-     * Use Container to resolve a method on a class.
+     * Call the given callback with the given parameters.
      *
-     * @param string $class
-     * @param string $method
+     * @param callable|string|array $concrete
      * @param array $params
      * @return mixed
      */
-    public function call(string $class, string $method, array $params = []): mixed;
+    public function call(callable|string|array $concrete, array $params = []): mixed;
 }

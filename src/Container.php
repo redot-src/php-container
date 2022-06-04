@@ -239,23 +239,15 @@ class Container implements ContainerContract
     }
 
     /**
-     * Use Container to resolve a method on a class.
+     * Call the given callback with the given parameters.
      *
-     * @param string $class
-     * @param string $method
+     * @param callable|string|array $concrete
      * @param array $params
      * @return mixed
-     *
-     * @throws BindingResolutionException
-     * @throws NotFoundException
-     * @throws ReflectionException
      */
-    public function call(string $class, string $method, array $params = []): mixed
+    public function call(callable|string|array $concrete, array $params = []): mixed
     {
-        $reflector = new ReflectionMethod($class, $method);
-        $dependencies = $reflector->getParameters();
-        $args = $this->getDependencies($dependencies, $params);
-        return $reflector->invokeArgs($this->make($class), $args);
+        // to be implemented ...
     }
 
     /**
