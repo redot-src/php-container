@@ -6,6 +6,7 @@ use Closure;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionException;
+use InvalidArgumentException;
 use Redot\Container\Errors\NotFoundException;
 use Redot\Container\Errors\BindingResolutionException;
 use Redot\Container\Contracts\Container as ContainerContract;
@@ -232,7 +233,7 @@ class Container implements ContainerContract
     protected function getDependencies(array $dependencies, array $params = []): array
     {
         return array_map(function ($dependency) use ($params) {
-            if (isset($params[$dependency->name])) return $params[$dependency->name];
+            if (isset($params[$dependency->getName()])) return $params[$dependency->getName()];
             if ($dependency->isDefaultValueAvailable()) return $dependency->getDefaultValue();
             return $this->make(Utils::getParameterClassName($dependency));
         }, $dependencies);
@@ -244,10 +245,43 @@ class Container implements ContainerContract
      * @param callable|string|array $concrete
      * @param array $params
      * @return mixed
+     *
+     * @throws BindingResolutionException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function call(callable|string|array $concrete, array $params = []): mixed
     {
-        // to be implemented ...
+        if (!is_array($concrete)) {
+            $concrete = $this->parseConcrete($concrete);
+        }
+
+        [$callback, $method] = $concrete;
+        $callback = is_string($callback) ? $this->make($callback) : $callback;
+
+        $reflector = new ReflectionMethod($callback, $method);
+        $args = $this->getDependencies($reflector->getParameters(), $params);
+        return $reflector->invokeArgs($callback, $args);
+    }
+
+    /**
+     * Parse concrete to array.
+     *
+     * @param callable|string $concrete
+     * @return array
+     */
+    protected function parseConcrete(callable|string $concrete): array
+    {
+        if (!is_string($concrete)) {
+            return [Closure::fromCallable($concrete), '__invoke']; 
+        }
+
+        if (str_contains($concrete, '@')) return explode('@', $concrete, 2);
+        if (str_contains($concrete, '::')) return explode('::', $concrete, 2);
+
+        throw new InvalidArgumentException(sprintf(
+            'Unable to parse [%s] to a valid callback.', $concrete
+        ));
     }
 
     /**

@@ -73,7 +73,7 @@ $container->make(brandNewClass::class);
 It will automatically bind the dependencies of the class, and if the class has a constructor, it will pass the dependencies to it, also the container can inject specific method dependencies using the `call` method.
 
 ```php
-$container->call(Foo::class, 'setBar', ['bar' => $bar]);
+$container->call([Foo::class, 'setBar'], ['bar' => $bar]);
 ```
 
 And that's it! Enjoy ✌.

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Redot\Container\Container;
 
@@ -41,21 +41,21 @@ test('Container::alias() sets an alias for an abstract', function () {
 });
 
 test('Container::call() calls a callable with the given parameters', function () {
-    $class = new class
+    class DummyClass
     {
         public function foo($bar = 'bar')
         {
             return $bar;
         }
-    };
+    }
 
     $container = new Container();
-    expect($container->call([$class, 'foo']))->toBe('bar');
     expect($container->call(fn ($foo) => $foo, ['foo' => 'bar']))->toBe('bar');
 
-    expect($container->call([get_class($class), 'foo']))->toBe('bar');
-    expect($container->call([get_class($class), 'foo'], ['bar' => 'foo']))->toBe('foo');
+    expect($container->call([new DummyClass, 'foo']))->toBe('bar');
+    expect($container->call([DummyClass::class, 'foo']))->toBe('bar');
+    expect($container->call([DummyClass::class, 'foo'], ['bar' => 'foo']))->toBe('foo');
 
-    expect($container->call(get_class($class) . '@foo'))->toBe('foo');
-    expect($container->call(get_class($class) . '::foo'))->toBe('bar');
+    expect($container->call(DummyClass::class . '@foo'))->toBe('bar');
+    expect($container->call(DummyClass::class . '::foo'))->toBe('bar');
 });
