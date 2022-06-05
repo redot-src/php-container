@@ -269,19 +269,17 @@ class Container implements ContainerContract
      *
      * @param callable|string $concrete
      * @return array
+     *
+     * @throws InvalidArgumentException
      */
     protected function parseConcrete(callable|string $concrete): array
     {
-        if (!is_string($concrete)) {
-            return [Closure::fromCallable($concrete), '__invoke']; 
+        if (is_string($concrete)) {
+            if (str_contains($concrete, '@')) return explode('@', $concrete, 2);
+            if (str_contains($concrete, '::')) return explode('::', $concrete, 2);
         }
 
-        if (str_contains($concrete, '@')) return explode('@', $concrete, 2);
-        if (str_contains($concrete, '::')) return explode('::', $concrete, 2);
-
-        throw new InvalidArgumentException(sprintf(
-            'Unable to parse [%s] to a valid callback.', $concrete
-        ));
+        return [Closure::fromCallable($concrete), '__invoke']; 
     }
 
     /**

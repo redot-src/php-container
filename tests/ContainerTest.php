@@ -1,6 +1,8 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Redot\Container\Container;
+use Redot\Container\Errors\NotFoundException;
+use Redot\Container\Errors\BindingResolutionException;
 
 test('Container::getInstance() returns the current container instance', function () {
     $container = Container::getInstance();
@@ -58,4 +60,14 @@ test('Container::call() calls a callable with the given parameters', function ()
 
     expect($container->call(DummyClass::class . '@foo'))->toBe('bar');
     expect($container->call(DummyClass::class . '::foo'))->toBe('bar');
+});
+
+test('Container throws an exception if concrete cannot be resolved', function () {
+    $container = new Container();
+    expect(fn () => $container->get('foo'))->toThrow(NotFoundException::class);
+});
+
+test('Container throws an exception if concrete is not instantiable', function () {
+    $container = new Container();
+    expect(fn () => $container->get('Closure'))->toThrow(BindingResolutionException::class);
 });
