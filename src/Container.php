@@ -269,8 +269,6 @@ class Container implements ContainerContract
      *
      * @param callable|string $concrete
      * @return array
-     *
-     * @throws InvalidArgumentException
      */
     protected function parseConcrete(callable|string $concrete): array
     {
