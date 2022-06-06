@@ -72,6 +72,10 @@ interface Container extends ContainerInterface
      * @param callable|string|array $concrete
      * @param array $params
      * @return mixed
+     *
+     * @throws BindingResolutionException
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     public function call(callable|string|array $concrete, array $params = []): mixed;
 }
