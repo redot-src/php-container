@@ -6,7 +6,6 @@ use Closure;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionException;
-use InvalidArgumentException;
 use Redot\Container\Errors\NotFoundException;
 use Redot\Container\Errors\BindingResolutionException;
 use Redot\Container\Contracts\Container as ContainerContract;
