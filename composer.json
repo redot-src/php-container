@@ -1,6 +1,6 @@
 {
     "name": "redot/container",
-    "description": "PHP Minimal DI Container",
+    "description": "Minimal, Lightweight, and Fast PHP Dependency Injection Container.",
     "license": "MIT",
     "support": {
         "issues": "https://github.com/redot-src/php-container/issues",
