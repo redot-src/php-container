@@ -20,7 +20,7 @@
         }
     },
     "require": {
-        "php": ">=8.0",
+        "php": "^8.0",
         "psr/container": "^2.0"
     },
     "require-dev": {
@@ -28,9 +28,6 @@
         "pestphp/pest": "^1.21"
     },
     "config": {
-        "lock": false,
-        "sort-packages": true,
-        "optimize-autoloader": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
