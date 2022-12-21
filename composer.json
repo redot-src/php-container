@@ -3,8 +3,8 @@
     "description": "Minimal, Lightweight, and Fast PHP Dependency Injection Container.",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/redot-src/php-container/issues",
-        "source": "https://github.com/redot-src/php-container"
+        "issues": "https://github.com/AbdelrhmanSaid/php-container/issues",
+        "source": "https://github.com/AbdelrhmanSaid/php-container"
     },
     "authors": [
         {
