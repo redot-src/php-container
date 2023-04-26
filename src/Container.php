@@ -262,6 +262,20 @@ class Container implements ContainerContract
         $args = $this->getDependencies($reflector->getParameters(), $params);
         return $reflector->invokeArgs($callback, $args);
     }
+    
+    /**
+     * Resolve all of the bindings.
+     *
+     * @return void
+     */
+    public function resolve(): void
+    {
+        foreach ($this->bindings as $abstract => $concrete) {
+            if (!isset($this->resolved[$abstract])) {
+                $this->make($abstract);
+            }
+        }
+    }
 
     /**
      * Parse concrete to array.
