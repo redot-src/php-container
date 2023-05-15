@@ -1,6 +1,6 @@
 # Redot PHP Container
 
-[![tests](https://github.com/AbdelrhmanSaid/php-container/actions/workflows/php.yml/badge.svg)](https://github.com/AbdelrhmanSaid/php-container/actions/workflows/php.yml)
+[![tests](https://github.com/redot-src/php-container/actions/workflows/php.yml/badge.svg)](https://github.com/redot-src/php-container/actions/workflows/php.yml)
 
 *Minimal, Lightweight, and Fast PHP Dependency Injection Container*
 

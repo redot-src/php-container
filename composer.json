@@ -3,13 +3,13 @@
     "description": "Minimal, Lightweight, and Fast PHP Dependency Injection Container.",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/AbdelrhmanSaid/php-container/issues",
-        "source": "https://github.com/AbdelrhmanSaid/php-container"
+        "issues": "https://github.com/redot-src/php-container/issues",
+        "source": "https://github.com/redot-src/php-container"
     },
     "authors": [
         {
             "name": "Abdelrhman Said",
-            "email": "abdelrhmansaidzaki@hotmail.com",
+            "email": "redot-srczaki@hotmail.com",
             "role": "Developer"
         }
     ],
