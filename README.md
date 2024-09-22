@@ -69,7 +69,7 @@ $container->alias(Foo::class, 'bar');
 Don't worry about the auto-wiring, the container will do it for you.
 
 ```php
-$container->make(brandNewClass::class);
+$container->make(BrandNewClass::class);
 ```
 
 It will automatically bind the dependencies of the class, and if the class has a constructor, it will pass the dependencies to it, also the container can inject specific method dependencies using the `call` method.
